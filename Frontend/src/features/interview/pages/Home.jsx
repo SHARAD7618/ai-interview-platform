@@ -12,7 +12,30 @@ const Home = () => {
 
     const navigate = useNavigate()
 
-    const handleGenerateReport = async () => {\n        // Validate inputs\n        if (!jobDescription.trim()) {\n            alert(\"Please enter a job description\")\n            return\n        }\n        if (!selfDescription.trim()) {\n            alert(\"Please enter a self description\")\n            return\n        }\n        \n        const resumeFile = resumeInputRef.current?.files?.[0]\n        try {\n            const data = await generateReport({ jobDescription, selfDescription, resumeFile })\n            if (data && data._id) {\n                navigate(`/interview/${data._id}`)\n            } else {\n                alert(\"Failed to generate interview report. Please try again.\")\n            }\n        } catch (error) {\n            console.error(\"Error in handleGenerateReport:\", error)\n            alert(\"An error occurred while generating your report. Please try again.\")\n        }\n    }
+    const handleGenerateReport = async () => {
+        // Validate inputs
+        if (!jobDescription.trim()) {
+            alert("Please enter a job description")
+            return
+        }
+        if (!selfDescription.trim()) {
+            alert("Please enter a self description")
+            return
+        }
+        
+        const resumeFile = resumeInputRef.current?.files?.[0]
+        try {
+            const data = await generateReport({ jobDescription, selfDescription, resumeFile })
+            if (data && data._id) {
+                navigate(`/interview/${data._id}`)
+            } else {
+                alert("Failed to generate interview report. Please try again.")
+            }
+        } catch (error) {
+            console.error("Error in handleGenerateReport:", error)
+            alert("An error occurred while generating your report. Please try again.")
+        }
+    }
 
     if (loading) {
         return (
