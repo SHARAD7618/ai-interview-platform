@@ -3,8 +3,18 @@ import axios from "axios";
 const api = axios.create({
     baseURL: "https://ai-interview-platform-5ypl.onrender.com",
     withCredentials: true,
-})
+});
 
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem("accessToken");
+
+    if (token) {
+        config.headers = config.headers || {};
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+});
 
 /**
  * @description Service to generate interview report based on user self description, resume and job description.

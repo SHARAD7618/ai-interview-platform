@@ -6,7 +6,7 @@ const tokenBlacklistModel = require("../models/blacklist.model");
 // Cookie Options
 const cookieOptions = {
     httpOnly: true,
-    secure: true,      // Render + Vercel ke liye true
+    secure: true,      // Render + Vercel 
     sameSite: "None",  // Cross-origin cookie
     maxAge: 24 * 60 * 60 * 1000 // 1 day
 };
@@ -61,7 +61,8 @@ async function registerUserController(req, res) {
                 id: user._id,
                 username: user.username,
                 email: user.email
-            }
+            },
+            token
         });
 
     } catch (error) {
@@ -120,7 +121,8 @@ async function loginUserController(req, res) {
                 id: user._id,
                 username: user.username,
                 email: user.email
-            }
+            },
+            token
         });
 
     } catch (error) {

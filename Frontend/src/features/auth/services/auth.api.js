@@ -8,6 +8,23 @@ const api = axios.create({
     }
 });
 
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem("accessToken");
+
+    if (token) {
+        config.headers = config.headers || {};
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+});
+
+const persistToken = (token) => {
+    if (token) {
+        localStorage.setItem("accessToken", token);
+    }
+};
+
 export async function register({ username, email, password }) {
     try {
         const response = await api.post("/api/auth/register", {
@@ -16,6 +33,7 @@ export async function register({ username, email, password }) {
             password
         });
 
+        persistToken(response.data?.token);
         return response.data;
     } catch (err) {
         console.error("Register Error:", err.response?.data || err.message);
@@ -30,6 +48,7 @@ export async function login({ email, password }) {
             password
         });
 
+        persistToken(response.data?.token);
         return response.data;
     } catch (err) {
         console.error("Login Error:", err.response?.data || err.message);
@@ -39,6 +58,7 @@ export async function login({ email, password }) {
 
 export async function logout() {
     try {
+        localStorage.removeItem("accessToken");
         const response = await api.get("/api/auth/logout");
 
         return response.data;

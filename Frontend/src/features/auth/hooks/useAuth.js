@@ -37,7 +37,7 @@ export const useAuth = () => {
     const handleLogout = async () => {
         setLoading(true)
         try {
-            const data = await logout()
+            await logout()
             setUser(null)
         } catch (err) {
 
@@ -49,18 +49,27 @@ export const useAuth = () => {
     useEffect(() => {
 
         const getAndSetUser = async () => {
-            try {
+            const token = localStorage.getItem("accessToken");
 
+            if (!token) {
+                setUser(null);
+                setLoading(false);
+                return;
+            }
+
+            try {
                 const data = await getMe()
-                setUser(data.user)
-            } catch (err) { } finally {
+                setUser(data.user || null)
+            } catch (err) {
+                setUser(null)
+            } finally {
                 setLoading(false)
             }
         }
 
         getAndSetUser()
 
-    }, [])
+    }, [setLoading, setUser])
 
     return { user, loading, handleRegister, handleLogin, handleLogout }
 }
