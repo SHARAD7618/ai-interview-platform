@@ -14,8 +14,8 @@ async function generateInterViewReportController(req, res) {
         let resumeText = ""
 
         if (req.file) {
-            const resumeContent = await (new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))).getText()
-            resumeText = resumeContent.text
+            const data = await pdfParse(req.file.buffer)
+            resumeText = data.text
         } else if (selfDescription) {
             resumeText = selfDescription
         } else {
